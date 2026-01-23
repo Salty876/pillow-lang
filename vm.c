@@ -1,9 +1,16 @@
 #include <stdio.h>
+#include <math.h>
 
 #include "vm.h"
 #include "debug.h"
 #define READ_BYTE() (*vm.ip++);
 #define READ_CONSTANT() (vm.chunk->constants.values[READ_BYTE()]);
+#define BINARY_OP(op) \
+    do { \
+        Value b = pop(); \
+        Value a = pop(); \
+        push(a op b); \
+    } while (false)
 
 VM vm;
 
@@ -50,12 +57,33 @@ static InterpretResult run() {
         }
 
 
-        case OP_RETURN:
+        case OP_RETURN: {
             printValue(pop());
             printf("\n");
             return INTERPRET_OK;
+            }
+
+        case OP_NEGATE: {
+            push(-pop());
+            break;
+            }
         
+        case OP_ADD:        BINARY_OP(+);        break;
+        case OP_SUBTRACT:   BINARY_OP(-);        break;
+        case OP_MULTIPLY:   BINARY_OP(*);        break;
+        case OP_DIVIDE:     BINARY_OP(/);        break;
+        // Modulo doesnt work on doubles so i gotta do sum cooked stuff
+        case OP_REMAINDER: {
+            Value b = pop();
+            Value a = pop();
+            push(fmod(a, b));
+            break;
         }
+
+        }
+
+        
+        
         
     }
 
@@ -83,3 +111,4 @@ Value pop() {
 
 #undef READ_BYTE
 #undef READ_CONSTANT
+#undef BINARY_OP
