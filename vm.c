@@ -7,9 +7,12 @@
 
 VM vm;
 
+static void resetStack() {
+    vm.stackTop = vm.stack; // Point the thing back to the start of the array to indicate stack is empty
+}
+
 void initVM() {
-
-
+    resetStack();
 }
 
 void freeVM() {
@@ -21,6 +24,14 @@ static InterpretResult run() {
 
     for (;;){
         #ifdef DEBUG_TRACE_EXECUTION
+            printf("          ");
+            for (Value* slot = vm.stack; slot < vm.stackTop; slot++) {
+                printf("[ ");
+                printValue(*slot);
+                printf(" ]");
+            
+            }
+            printf("\n");
             disassembleInstruction(vm.chunk, (int)(vm.ip - vm.chunk->code));
         #endif
 
@@ -32,6 +43,7 @@ static InterpretResult run() {
 
         case OP_CONSTANT: {
             Value constant = READ_CONSTANT();
+            push(constant);
             printValue(constant);
             printf("\n");
             break;
@@ -39,6 +51,8 @@ static InterpretResult run() {
 
 
         case OP_RETURN:
+            printValue(pop());
+            printf("\n");
             return INTERPRET_OK;
         
         }
@@ -53,6 +67,18 @@ InterpretResult interpret(Chunk* chunk){
     vm.chunk = chunk;
     vm.ip = vm.chunk->code;
     return run();
+}
+
+void push(Value value) {
+    // Add to the stacktop and push the stack top one to next empty spot
+    *vm.stackTop = value;
+    vm.stackTop++;
+}
+
+Value pop() {
+    // Decrement the stacktop and return the elemt at that spot
+    *vm.stackTop --;
+    return *vm.stackTop;
 }
 
 #undef READ_BYTE
