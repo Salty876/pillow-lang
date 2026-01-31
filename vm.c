@@ -5,7 +5,7 @@
 #include "debug.h"
 #include "compiler.h"
 
-#define READ_BYTE() (*vm.ip++);
+#define READ_BYTE() (*vm.ip++)
 #define READ_CONSTANT() (vm.chunk->constants.values[READ_BYTE()]);
 #define BINARY_OP(op) \
     do { \
@@ -44,7 +44,7 @@ static InterpretResult run() {
             disassembleInstruction(vm.chunk, (int)(vm.ip - vm.chunk->code));
         #endif
 
-        u_int8_t instruction;
+        uint8_t instruction;
         
         switch (instruction = READ_BYTE())
         {

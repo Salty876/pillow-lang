@@ -21,7 +21,7 @@ void initScanner(const char* source) {
 }
 
 static bool isAlpha(char c) {
-    return  (c >= 'a' && c <= "z") ||
+    return  (c >= 'a' && c <= 'z') ||
             (c >= 'A' && c <= 'Z') ||
             c == '_';
 }
