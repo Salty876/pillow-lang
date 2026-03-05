@@ -147,7 +147,7 @@ ParseRule rules[] = {
   [TOKEN_PLUS]          = {NULL,     binary, PREC_TERM},
   [TOKEN_SEMICOLON]     = {NULL,     NULL,   PREC_NONE},
   [TOKEN_SLASH]         = {NULL,     binary, PREC_FACTOR},
-  [TOKEN_PERCENT]         = {NULL,     binary, PREC_FACTOR},
+  [TOKEN_PERCENT]       = {NULL,     binary, PREC_FACTOR},
   [TOKEN_STAR]          = {NULL,     binary, PREC_FACTOR},
   [TOKEN_BANG]          = {NULL,     NULL,   PREC_NONE},
   [TOKEN_BANG_EQUAL]    = {NULL,     NULL,   PREC_NONE},
@@ -236,7 +236,7 @@ static void grouping() {
 
 static void number() {
     double value = strtod(parser.prev.start, NULL);
-    emitConstant(value);
+    emitConstant(NUMBER_VAL(value));
 }
 
 static void unary() {
