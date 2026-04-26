@@ -163,17 +163,17 @@ ParseRule rules[] = {
   [TOKEN_AND]           = {NULL,     NULL,   PREC_NONE},
   [TOKEN_CLASS]         = {NULL,     NULL,   PREC_NONE},
   [TOKEN_ELSE]          = {NULL,     NULL,   PREC_NONE},
-  [TOKEN_FALSE]         = {NULL,     NULL,   PREC_NONE},
+  [TOKEN_FALSE]         = {literal,     NULL,   PREC_NONE},
   [TOKEN_FOR]           = {NULL,     NULL,   PREC_NONE},
   [TOKEN_FUNC]           = {NULL,     NULL,   PREC_NONE},
   [TOKEN_IF]            = {NULL,     NULL,   PREC_NONE},
-  [TOKEN_NULL]           = {NULL,     NULL,   PREC_NONE},
+  [TOKEN_NULL]           = {literal,     NULL,   PREC_NONE},
   [TOKEN_OR]            = {NULL,     NULL,   PREC_NONE},
   [TOKEN_PRINT]         = {NULL,     NULL,   PREC_NONE},
   [TOKEN_RET]        = {NULL,     NULL,   PREC_NONE},
   [TOKEN_SUPER]         = {NULL,     NULL,   PREC_NONE},
   [TOKEN_THIS]          = {NULL,     NULL,   PREC_NONE},
-  [TOKEN_TRUE]          = {NULL,     NULL,   PREC_NONE},
+  [TOKEN_TRUE]          = {literal,     NULL,   PREC_NONE},
   [TOKEN_VAL]           = {NULL,     NULL,   PREC_NONE},
   [TOKEN_WHILE]         = {NULL,     NULL,   PREC_NONE},
   [TOKEN_ERROR]         = {NULL,     NULL,   PREC_NONE},
@@ -222,6 +222,16 @@ static void binary() {
     }
 }
 
+static void literal() {
+    switch (parser.prev.type)
+    {
+    case TOKEN_FALSE: emitByte(OP_FALSE); break;
+    case TOKEN_TRUE: emitByte(OP_TRUE); break;
+    case TOKEN_NULL: emitByte(OP_NULL); break;
+    default: return; // Never gets here
+
+    }
+}
 
 static void expression() {
     parsePrecedence(PREC_ASSIGNMENT);
