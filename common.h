@@ -1,4 +1,4 @@
-#ifndef pillow_common_h
+                                 #ifndef pillow_common_h
 #define pillow_common_h
 
 #include <stdbool.h>
