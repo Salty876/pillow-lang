@@ -8,6 +8,7 @@
 #include "debug.h"
 #include "vm.h"
 
+
 // Forward declaration
 static char* readFile(const char* path);
 
